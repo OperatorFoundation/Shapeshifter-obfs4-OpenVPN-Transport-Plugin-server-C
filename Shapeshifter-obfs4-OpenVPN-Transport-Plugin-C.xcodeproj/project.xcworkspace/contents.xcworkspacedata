@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:../Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-Shapeshifter-obfs4-OpenVPN-Transport-Plugin.a">
+   </FileRef>
+   <FileRef
+      location = "group:../Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h">
+   </FileRef>
+   <FileRef
+      location = "self:Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C.xcodeproj">
+   </FileRef>
+</Workspace>

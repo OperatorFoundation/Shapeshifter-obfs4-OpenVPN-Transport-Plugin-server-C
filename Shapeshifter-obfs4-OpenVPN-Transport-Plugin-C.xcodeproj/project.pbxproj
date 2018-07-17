@@ -1,0 +1,341 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		46F1EC8420FE65F300C71C22 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 46F1EC8320FE65F300C71C22 /* main.c */; };
+		46F1EC9020FE679200C71C22 /* shapeshifter-obfs4-posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 46F1EC8B20FE679200C71C22 /* shapeshifter-obfs4-posix.c */; };
+		46F1EC9220FE679200C71C22 /* shapeshifter-obfs4.c in Sources */ = {isa = PBXBuildFile; fileRef = 46F1EC8D20FE679200C71C22 /* shapeshifter-obfs4.c */; };
+		46F1ECA520FEADDE00C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F1ECA220FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		46F1EC7E20FE65F300C71C22 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46F1EC8320FE65F300C71C22 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		46F1EC8B20FE679200C71C22 /* shapeshifter-obfs4-posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "shapeshifter-obfs4-posix.c"; sourceTree = "<group>"; };
+		46F1EC8D20FE679200C71C22 /* shapeshifter-obfs4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "shapeshifter-obfs4.c"; sourceTree = "<group>"; };
+		46F1EC8E20FE679200C71C22 /* shapeshifter-obfs4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "shapeshifter-obfs4.h"; sourceTree = "<group>"; };
+		46F1EC8F20FE679200C71C22 /* README.shapeshifter-obfs4 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README.shapeshifter-obfs4"; sourceTree = "<group>"; };
+		46F1EC9420FE681700C71C22 /* openvpn-plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "openvpn-plugin.h"; sourceTree = "<group>"; };
+		46F1EC9520FE681700C71C22 /* openvpn-vsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "openvpn-vsocket.h"; sourceTree = "<group>"; };
+		46F1ECA120FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"; sourceTree = SOURCE_ROOT; };
+		46F1ECA220FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so"; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so"; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		46F1EC7D20FE65F300C71C22 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46F1ECA520FEADDE00C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		46F1EC7720FE65F300C71C22 = {
+			isa = PBXGroup;
+			children = (
+				46F1EC9320FE681700C71C22 /* OpenVPN-Files */,
+				46F1EC8220FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */,
+				46F1EC8120FE65F300C71C22 /* Products */,
+				46F1ECA420FEADDE00C71C22 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		46F1EC8120FE65F300C71C22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		46F1EC8220FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */ = {
+			isa = PBXGroup;
+			children = (
+				46F1EC9D20FE847700C71C22 /* Libraries */,
+				46F1EC8F20FE679200C71C22 /* README.shapeshifter-obfs4 */,
+				46F1EC8B20FE679200C71C22 /* shapeshifter-obfs4-posix.c */,
+				46F1EC8D20FE679200C71C22 /* shapeshifter-obfs4.c */,
+				46F1EC8E20FE679200C71C22 /* shapeshifter-obfs4.h */,
+				46F1EC8320FE65F300C71C22 /* main.c */,
+			);
+			path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C";
+			sourceTree = "<group>";
+		};
+		46F1EC9320FE681700C71C22 /* OpenVPN-Files */ = {
+			isa = PBXGroup;
+			children = (
+				46F1EC9420FE681700C71C22 /* openvpn-plugin.h */,
+				46F1EC9520FE681700C71C22 /* openvpn-vsocket.h */,
+			);
+			path = "OpenVPN-Files";
+			sourceTree = "<group>";
+		};
+		46F1EC9D20FE847700C71C22 /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				46F1ECA120FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h */,
+				46F1ECA220FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so */,
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		46F1ECA420FEADDE00C71C22 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		46F1EC7F20FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 46F1EC8720FE65F300C71C22 /* Build configuration list for PBXNativeTarget "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */;
+			buildPhases = (
+				46F1EC7C20FE65F300C71C22 /* Sources */,
+				46F1EC7D20FE65F300C71C22 /* Frameworks */,
+				46F1EC7E20FE65F300C71C22 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C";
+			productName = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C";
+			productReference = 46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		46F1EC7820FE65F300C71C22 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = "Operator Foundation";
+				TargetAttributes = {
+					46F1EC7F20FE65F300C71C22 = {
+						CreatedOnToolsVersion = 9.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 46F1EC7B20FE65F300C71C22 /* Build configuration list for PBXProject "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 46F1EC7720FE65F300C71C22;
+			productRefGroup = 46F1EC8120FE65F300C71C22 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				46F1EC7F20FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		46F1EC7C20FE65F300C71C22 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				46F1EC9020FE679200C71C22 /* shapeshifter-obfs4-posix.c in Sources */,
+				46F1EC9220FE679200C71C22 /* shapeshifter-obfs4.c in Sources */,
+				46F1EC8420FE65F300C71C22 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		46F1EC8520FE65F300C71C22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				SDKROOT = macosx;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		46F1EC8620FE65F300C71C22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Mac Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+		46F1EC8820FE65F300C71C22 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 67Y4NSLDQ3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C",
+					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Libraries",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		46F1EC8920FE65F300C71C22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 67Y4NSLDQ3;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C",
+					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Libraries",
+				);
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		46F1EC7B20FE65F300C71C22 /* Build configuration list for PBXProject "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46F1EC8520FE65F300C71C22 /* Debug */,
+				46F1EC8620FE65F300C71C22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		46F1EC8720FE65F300C71C22 /* Build configuration list for PBXNativeTarget "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				46F1EC8820FE65F300C71C22 /* Debug */,
+				46F1EC8920FE65F300C71C22 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 46F1EC7820FE65F300C71C22 /* Project object */;
+}
