@@ -1,3 +1,6 @@
+#pragma once
+#define _WINSOCKAPI_    // stops windows.h including winsock.h
+
 #include "shapeshifter-obfs4.h"
 #include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"
 #include "openvpn-vsocket.h"
@@ -6,8 +9,10 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <windows.h>
-#include <winsock2.h>
+
+//#include <winsock2.h>
+//#include <windows.h>
+
 #include <assert.h>
 
 static inline bool is_invalid_handle(HANDLE h)

@@ -1,3 +1,5 @@
+#define _WINSOCKAPI_    // stops windows.h including winsock.h
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>

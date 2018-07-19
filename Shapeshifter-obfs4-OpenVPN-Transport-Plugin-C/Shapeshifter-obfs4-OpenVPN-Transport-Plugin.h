@@ -2,6 +2,18 @@
 
 /* package github.com/OperatorFoundation/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-Cgo */
 
+
+#line 1 "cgo-builtin-prolog"
+
+#include <stddef.h> /* for ptrdiff_t below */
+
+#ifndef GO_CGO_EXPORT_PROLOGUE_H
+#define GO_CGO_EXPORT_PROLOGUE_H
+
+typedef struct { const char *p; ptrdiff_t n; } _GoString_;
+
+#endif
+
 /* Start of preamble from import "C" comments.  */
 
 
@@ -24,21 +36,21 @@ typedef int GoInt32;
 typedef unsigned int GoUint32;
 typedef long long GoInt64;
 typedef unsigned long long GoUint64;
-typedef GoInt64 GoInt;
-typedef GoUint64 GoUint;
-typedef __SIZE_TYPE__ GoUintptr;
+typedef GoInt32 GoInt;
+typedef GoUint32 GoUint;
+typedef size_t GoUintptr;
 typedef float GoFloat32;
 typedef double GoFloat64;
-typedef float _Complex GoComplex64;
-typedef double _Complex GoComplex128;
+//typedef float _Complex GoComplex64;
+//typedef double _Complex GoComplex128;
 
 /*
   static assertion to make sure the file is being used on architecture
   at least with matching size of GoInt.
 */
-typedef char _check_for_64_bit_pointer_matching_GoInt[sizeof(void*)==64/8 ? 1:-1];
+typedef char _check_for_32_bit_pointer_matching_GoInt[sizeof(void*)==32/8 ? 1:-1];
 
-typedef struct { const char *p; GoInt n; } GoString;
+typedef _GoString_ GoString;
 typedef void *GoMap;
 typedef void *GoChan;
 typedef struct { void *t; void *v; } GoInterface;
