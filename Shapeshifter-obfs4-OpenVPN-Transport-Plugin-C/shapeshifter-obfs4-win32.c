@@ -1,4 +1,5 @@
 #include "shapeshifter-obfs4.h"
+#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
@@ -38,9 +39,7 @@ struct io_slot
     size_t buf_len, buf_cap;
 };
 
-static bool
-setup_io_slot(struct io_slot *slot, struct shapeshifter_obfs4_context *ctx,
-              SOCKET socket, HANDLE event)
+static bool setup_io_slot(struct io_slot *slot, struct shapeshifter_obfs4_context *ctx, SOCKET socket, HANDLE event)
 {
     slot->ctx = ctx;
     slot->status = IO_SLOT_DORMANT;
@@ -52,8 +51,7 @@ setup_io_slot(struct io_slot *slot, struct shapeshifter_obfs4_context *ctx,
 
 /* Note that this assumes any I/O has already been implicitly canceled (via closesocket),
    but not waited for yet. */
-static bool
-destroy_io_slot(struct io_slot *slot)
+static bool destroy_io_slot(struct io_slot *slot)
 {
     if (slot->status == IO_SLOT_PENDING)
     {
@@ -73,8 +71,7 @@ destroy_io_slot(struct io_slot *slot)
 }
 
 /* FIXME: aborts on error. */
-static void
-resize_io_buf(struct io_slot *slot, size_t cap)
+static void resize_io_buf(struct io_slot *slot, size_t cap)
 {
     if (slot->buf)
     {
@@ -93,13 +90,17 @@ struct shapeshifter_obfs4_socket_win32
 {
     struct openvpn_vsocket_handle handle;
     struct shapeshifter_obfs4_context *ctx;
-    SOCKET socket;
+    //SOCKET socket;
 
     /* Write is ready when idle; read is not-ready when idle. Both level-triggered. */
     struct openvpn_vsocket_win32_event_pair completion_events;
     struct io_slot slot_read, slot_write;
 
-    int last_rwflags;
+    unsigned last_rwflags;
+
+    // obfs4
+    GoInt client_id;
+    int pipe_fd[2];
 };
 
 struct openvpn_vsocket_vtab shapeshifter_obfs4_socket_vtab;
@@ -113,8 +114,6 @@ free_socket(struct shapeshifter_obfs4_socket_win32 *sock)
 
     if (!sock)
         return;
-    if (sock->socket != INVALID_SOCKET)
-        closesocket(sock->socket);
 
     /* closesocket cancels any pending overlapped I/O, but we still have to potentially
        wait for it here before we can free the buffers. This has to happen before closing
@@ -141,6 +140,12 @@ free_socket(struct shapeshifter_obfs4_socket_win32 *sock)
     if (!is_invalid_handle(sock->completion_events.write))
         CloseHandle(sock->completion_events.write);
 
+    Obfs4_close_connection(sock->client_id);
+
+    //FIXME: win32 version
+    close(sock->pipe_fd[0]);
+    close(sock->pipe_fd[1]);
+
     free(sock);
 }
 
@@ -149,54 +154,31 @@ shapeshifter_obfs4_win32_bind(void *plugin_handle,
                      const struct sockaddr *addr, openvpn_vsocket_socklen_t len)
 {
     struct shapeshifter_obfs4_socket_win32 *sock = NULL;
-//    struct sockaddr *addr_rev = NULL;
-//
-//    /* TODO: would be nice to factor out some of these sequences */
-//    addr_rev = calloc(1, len);
-//    if (!addr_rev)
-//        goto error;
-//    memcpy(addr_rev, addr, len);
-//    shapeshifter_obfs4_munge_addr(addr_rev, len);
 
     sock = calloc(1, sizeof(struct shapeshifter_obfs4_socket_win32));
     if (!sock)
         goto error;
+
     sock->handle.vtab = &shapeshifter_obfs4_socket_vtab;
     sock->ctx = (struct shapeshifter_obfs4_context *) plugin_handle;
 
-    /* Preemptively initialize the members of some Win32 types so error exits are okay later on.
-       HANDLEs of NULL are considered invalid per above. */
-    sock->socket = INVALID_SOCKET;
+    // Create an obfs4 client.
+    sock->client_id = Initialize_obfs4_c_client(sock->ctx->cert_string, sock->ctx->iat_mode);
 
-    sock->socket = socket(addr->sa_family, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock->socket == INVALID_SOCKET)
-        goto error;
+    //FIXME: This only works for ipv4 addresses, need to address ipv6
+    struct sockaddr_in *addr_in = (struct sockaddr_in *)addr;
+    GoInt dial_result = Obfs4_dial(sock->client_id, inet_ntoa(addr_in->sin_addr));
 
-    /* See above: write is ready when idle, read is not-ready when idle. */
-    sock->completion_events.read = CreateEvent(NULL, TRUE, FALSE, NULL);
-    sock->completion_events.write = CreateEvent(NULL, TRUE, TRUE, NULL);
-    
-    if (is_invalid_handle(sock->completion_events.read) || is_invalid_handle(sock->completion_events.write))
-        goto error;
-    
-    if (!setup_io_slot(&sock->slot_read, sock->ctx,
-                       sock->socket, sock->completion_events.read))
-        goto error;
-    
-    if (!setup_io_slot(&sock->slot_write, sock->ctx,
-                       sock->socket, sock->completion_events.write))
-        goto error;
-
-    if (bind(sock->socket, addr, len))
+    if (dial_result != 0)
         goto error;
 
     return &sock->handle;
 
-error:
-    shapeshifter_obfs4_log((struct shapeshifter_obfs4_context *) plugin_handle, PLOG_ERR,
-                  "bind failure: WSA error = %d", WSAGetLastError());
-    free_socket(sock);
-    return NULL;
+    error:
+        shapeshifter_obfs4_log((struct shapeshifter_obfs4_context *) plugin_handle, PLOG_ERR,
+                      "bind failure: WSA error = %d", WSAGetLastError());
+        free_socket(sock);
+        return NULL;
 }
 
 static void
@@ -362,14 +344,16 @@ static void
 shapeshifter_obfs4_win32_request_event(openvpn_vsocket_handle_t handle,
                               openvpn_vsocket_event_set_handle_t event_set, unsigned rwflags)
 {
-    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
-    shapeshifter_obfs4_log(sock->ctx, PLOG_DEBUG, "request-event: %d", rwflags);
-    sock->last_rwflags = 0;
+    shapeshifter_obfs4_log(((struct shapeshifter_obfs4_socket_win32 *)handle)->ctx, PLOG_DEBUG, "request-event: %d", rwflags);
+    ((struct shapeshifter_obfs4_socket_win32 *)handle)->last_rwflags = 0;
 
-    if (rwflags & OPENVPN_VSOCKET_EVENT_READ)
-        ensure_pending_read(sock);
-    if (rwflags)
-        event_set->vtab->set_event(event_set, &sock->completion_events, rwflags, handle);
+//    if (rwflags & OPENVPN_VSOCKET_EVENT_READ)
+////        ensure_pending_read(sock);
+
+    if (rwflags) {
+        event_set->vtab->set_event(event_set, ((struct shapeshifter_obfs4_socket_win32 *) handle)->pipe_fd[0], rwflags,
+                                   handle);
+    }
 }
 
 static bool
@@ -377,8 +361,10 @@ shapeshifter_obfs4_win32_update_event(openvpn_vsocket_handle_t handle, void *arg
 {
     shapeshifter_obfs4_log(((struct shapeshifter_obfs4_socket_win32 *) handle)->ctx, PLOG_DEBUG,
                   "update-event: %p, %p, %d", handle, arg, rwflags);
-    if (arg != handle)
+    if (arg != handle) {
         return false;
+    }
+
     ((struct shapeshifter_obfs4_socket_win32 *) handle)->last_rwflags |= rwflags;
     return true;
 }
@@ -386,120 +372,148 @@ shapeshifter_obfs4_win32_update_event(openvpn_vsocket_handle_t handle, void *arg
 static unsigned
 shapeshifter_obfs4_win32_pump(openvpn_vsocket_handle_t handle)
 {
-    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
-    unsigned result = 0;
+//    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
+//    unsigned result = 0;
+//
+//    if ((sock->last_rwflags & OPENVPN_VSOCKET_EVENT_READ) && complete_pending_read(sock))
+//        result |= OPENVPN_VSOCKET_EVENT_READ;
+//    if ((sock->last_rwflags & OPENVPN_VSOCKET_EVENT_WRITE) &&
+//        (sock->slot_write.status != IO_SLOT_PENDING || complete_pending_write(sock)))
+//        result |= OPENVPN_VSOCKET_EVENT_WRITE;
+//
+//    shapeshifter_obfs4_log(sock->ctx, PLOG_DEBUG, "pump -> %d", result);
+//    return result;
 
-    if ((sock->last_rwflags & OPENVPN_VSOCKET_EVENT_READ) && complete_pending_read(sock))
-        result |= OPENVPN_VSOCKET_EVENT_READ;
-    if ((sock->last_rwflags & OPENVPN_VSOCKET_EVENT_WRITE) &&
-        (sock->slot_write.status != IO_SLOT_PENDING || complete_pending_write(sock)))
-        result |= OPENVPN_VSOCKET_EVENT_WRITE;
+    shapeshifter_obfs4_log(((struct shapeshifter_obfs4_socket_win32 *) handle)->ctx, PLOG_DEBUG, "pump -> %d", ((struct shapeshifter_obfs4_socket_win32 *) handle)->last_rwflags);
 
-    shapeshifter_obfs4_log(sock->ctx, PLOG_DEBUG, "pump -> %d", result);
-    return result;
+    return ((struct shapeshifter_obfs4_socket_win32 *) handle)->last_rwflags;
 }
 
-static SSIZE_T shapeshifter_obfs4_win32_recvfrom(openvpn_vsocket_handle_t handle, void *buf, size_t len, struct sockaddr *addr, openvpn_vsocket_socklen_t *addrlen)
+static ssize_t shapeshifter_obfs4_win32_recvfrom(openvpn_vsocket_handle_t handle, void *buf, size_t len, struct sockaddr *addr, openvpn_vsocket_socklen_t *addrlen)
 {
-    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
-    if (!complete_pending_read(sock))
+    GoInt client_id = ((struct shapeshifter_obfs4_socket_win32 *) handle)->client_id;
+    GoInt number_of_bytes_read = Obfs4_read(client_id, (void *)buf, (int)len);
+
+    if (number_of_bytes_read < 0)
     {
-        WSASetLastError(WSA_IO_INCOMPLETE);
         return -1;
     }
 
-    if (!sock->slot_read.succeeded)
-    {
-        int wsa_error = sock->slot_read.wsa_error;
-        consumed_pending_read(sock);
-        WSASetLastError(wsa_error);
-        return -1;
-    }
-    
-    // sock->slot_read now has valid data.
-    char *working_buf = sock->slot_read.buf;
-    ssize_t working_len = sock->slot_read.buf_len;
+    shapeshifter_obfs4_log(((struct shapeshifter_obfs4_socket_win32 *) handle)->ctx,
+                           PLOG_DEBUG, "recvfrom(%d) -> %d", (int)len, (int)number_of_bytes_read);
 
-    if (working_len < 0)
-    {
-        /* Act as though this read never happened. Assume one was queued before, so it should
-           still remain queued. */
-        consumed_pending_read(sock);
-        ensure_pending_read(sock);
-        WSASetLastError(WSA_IO_INCOMPLETE);
-        return -1;
-    }
+    return number_of_bytes_read;
 
-    size_t copy_len = working_len;
-    if (copy_len > len)
-        copy_len = len;
-    memcpy(buf, sock->slot_read.buf, copy_len);
-
-    /* TODO: shouldn't truncate, should signal error (but this shouldn't happen for any
-       supported address families anyway). */
-    openvpn_vsocket_socklen_t addr_copy_len = *addrlen;
-    if (sock->slot_read.addr_len < addr_copy_len)
-        addr_copy_len = sock->slot_read.addr_len;
-    memcpy(addr, &sock->slot_read.addr, addr_copy_len);
-    *addrlen = addr_copy_len;
-//    if (addr_copy_len > 0)
-//        shapeshifter_obfs4_munge_addr(addr, addr_copy_len);
-
-    /* Reset the I/O slot before returning. */
-    consumed_pending_read(sock);
-    return copy_len;
+//    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
+//    if (!complete_pending_read(sock))
+//    {
+//        WSASetLastError(WSA_IO_INCOMPLETE);
+//        return -1;
+//    }
+//
+//    if (!sock->slot_read.succeeded)
+//    {
+//        int wsa_error = sock->slot_read.wsa_error;
+//        consumed_pending_read(sock);
+//        WSASetLastError(wsa_error);
+//        return -1;
+//    }
+//
+//    char *working_buf = sock->slot_read.buf;
+//    ssize_t working_len = sock->slot_read.buf_len;
+//
+//    if (working_len < 0)
+//    {
+//        /* Act as though this read never happened. Assume one was queued before, so it should
+//           still remain queued. */
+//        consumed_pending_read(sock);
+//        ensure_pending_read(sock);
+//        WSASetLastError(WSA_IO_INCOMPLETE);
+//        return -1;
+//    }
+//
+//    size_t copy_len = working_len;
+//    if (copy_len > len)
+//        copy_len = len;
+//    memcpy(buf, sock->slot_read.buf, copy_len);
+//
+//    /* TODO: shouldn't truncate, should signal error (but this shouldn't happen for any
+//       supported address families anyway). */
+//    openvpn_vsocket_socklen_t addr_copy_len = *addrlen;
+//    if (sock->slot_read.addr_len < addr_copy_len)
+//        addr_copy_len = sock->slot_read.addr_len;
+//    memcpy(addr, &sock->slot_read.addr, addr_copy_len);
+//    *addrlen = addr_copy_len;
+//
+//    /* Reset the I/O slot before returning. */
+//    consumed_pending_read(sock);
+//    return copy_len;
 }
 
 static SSIZE_T shapeshifter_obfs4_win32_sendto(openvpn_vsocket_handle_t handle, const void *buf, size_t len, const struct sockaddr *addr, openvpn_vsocket_socklen_t addrlen)
 {
-    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
-    complete_pending_write(sock);
+    GoInt client_id = ((struct shapeshifter_obfs4_socket_win32 *) handle)->client_id;
+    GoInt number_of_characters_sent = Obfs4_write(client_id, (void *)buf, (int)len);
 
-    if (sock->slot_write.status == IO_SLOT_PENDING)
+    if (number_of_characters_sent < 0)
     {
-        /* This shouldn't really happen, but. */
-        WSASetLastError(WSAEWOULDBLOCK);
+        goto error;
+    }
+
+    shapeshifter_obfs4_log(((struct shapeshifter_obfs4_socket_win32 *) handle)->ctx, PLOG_DEBUG, "sendto(%d) -> %d", (int)len, (int)number_of_characters_sent);
+
+    return number_of_characters_sent;
+
+    error:
         return -1;
-    }
 
-    if (addrlen > sock->slot_write.addr_cap)
-    {
-        /* Shouldn't happen. */
-        WSASetLastError(WSAEFAULT);
-        return -1;
-    }
-
-    /* TODO: propagate previous write errors---what does core expect here? */
-    memcpy(&sock->slot_write.addr, addr, addrlen);
-    sock->slot_write.addr_len = addrlen;
-	sock->slot_write.buf_len = len;
-    
-    queue_new_write(&sock->slot_write);
-    switch (sock->slot_write.status)
-    {
-        case IO_SLOT_PENDING:
-            /* The network hasn't given us an error yet, but _we've_ consumed all the bytes.
-               ... sort of. */
-            return len;
-
-        case IO_SLOT_DORMANT:
-            /* Huh?? But we just queued a write. */
-            abort();
-
-        case IO_SLOT_COMPLETE:
-            if (sock->slot_write.succeeded)
-                /* TODO: more partial length handling */
-                return len;
-            else
-                return -1;
-
-        default:
-            abort();
-    }
+//    struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
+//    complete_pending_write(sock);
+//
+//    if (sock->slot_write.status == IO_SLOT_PENDING)
+//    {
+//        /* This shouldn't really happen, but. */
+//        WSASetLastError(WSAEWOULDBLOCK);
+//        return -1;
+//    }
+//
+//    if (addrlen > sock->slot_write.addr_cap)
+//    {
+//        /* Shouldn't happen. */
+//        WSASetLastError(WSAEFAULT);
+//        return -1;
+//    }
+//
+//    /* TODO: propagate previous write errors---what does core expect here? */
+//    memcpy(&sock->slot_write.addr, addr, addrlen);
+//    sock->slot_write.addr_len = addrlen;
+//	sock->slot_write.buf_len = len;
+//
+//    queue_new_write(&sock->slot_write);
+//    switch (sock->slot_write.status)
+//    {
+//        case IO_SLOT_PENDING:
+//            /* The network hasn't given us an error yet, but _we've_ consumed all the bytes.
+//               ... sort of. */
+//            return len;
+//
+//        case IO_SLOT_DORMANT:
+//            /* Huh?? But we just queued a write. */
+//            abort();
+//
+//        case IO_SLOT_COMPLETE:
+//            if (sock->slot_write.succeeded)
+//                /* TODO: more partial length handling */
+//                return len;
+//            else
+//                return -1;
+//
+//        default:
+//            abort();
+//    }
 }
 
-static void
-shapeshifter_obfs4_win32_close(openvpn_vsocket_handle_t handle)
+static void shapeshifter_obfs4_win32_close(openvpn_vsocket_handle_t handle)
 {
     free_socket((struct shapeshifter_obfs4_socket_win32 *) handle);
 }

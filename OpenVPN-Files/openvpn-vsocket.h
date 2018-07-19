@@ -24,7 +24,7 @@ typedef const struct openvpn_vsocket_win32_event_pair {
 
 /* Windows doesn't have socklen_t; it uses int. */
 typedef int openvpn_vsocket_socklen_t;
-typedef int SSIZE_T ssize_t;
+typedef SSIZE_T ssize_t;
 
 #else
 
