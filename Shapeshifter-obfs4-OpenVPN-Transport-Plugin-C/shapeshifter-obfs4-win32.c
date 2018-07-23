@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-//#include <winsock2.h>
-//#include <windows.h>
+#include <winsock2.h>
+#include <windows.h>
 
 #include <assert.h>
 

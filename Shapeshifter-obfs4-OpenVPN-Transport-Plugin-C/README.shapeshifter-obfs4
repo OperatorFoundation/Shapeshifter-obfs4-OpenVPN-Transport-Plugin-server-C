@@ -1,5 +1,13 @@
 shapeshifter-obfs4
 
+DEPENDENCIES
+
+1) Go
+
+2) GCC (can be found here: http://tdm-gcc.tdragon.net/)
+
+3) Git
+
 
 ADDING THE GO CODE
 
@@ -9,7 +17,7 @@ ADDING THE GO CODE
 
 2) From the go project directory run the following command to generate the library files that you will need:
 
-    $go build -buildmode=c-shared -o Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so
+    $go build -buildmode=c-shared -o Shapeshifter-obfs4-OpenVPN-Transport-Plugin.lib
 
 3) Copy the following files into the Xcode/C project directory: Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h and Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so
 
