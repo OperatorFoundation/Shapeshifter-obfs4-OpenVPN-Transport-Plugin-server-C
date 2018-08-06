@@ -2,7 +2,7 @@
 
 1) Check out the go code:
 
-    $go get github.com/OperatorFoundation/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-Cgo
+    $go get github.com/OperatorFoundation/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo
 
 2) From the go project directory run the following command to generate the library files that you will need:
 

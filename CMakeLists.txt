@@ -4,15 +4,15 @@ project(Shapeshifter_obfs4_OpenVPN_Transport_Plugin_C C)
 set(CMAKE_C_STANDARD 11)
 
 include_directories(OpenVPN-Files)
-include_directories(Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C)
+include_directories(Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C)
 
 add_library(Shapeshifter_obfs4_OpenVPN_Transport_Plugin_C SHARED
         OpenVPN-Files/openvpn-plugin.h
         OpenVPN-Files/openvpn-vsocket.h
-        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h
-        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/shapeshifter-obfs4-win32.c
-        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/shapeshifter-obfs4.c
-        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/shapeshifter-obfs4.h)
+        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C/Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h
+        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C/shapeshifter-obfs4-win32.c
+        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C/shapeshifter-obfs4.c
+        Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C/shapeshifter-obfs4.h)
 
 #add_library(CGOLIB SHARED
 #        Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h

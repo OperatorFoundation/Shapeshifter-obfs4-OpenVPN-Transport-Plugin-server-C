@@ -9,8 +9,7 @@
 struct shapeshifter_obfs4_context
 {
     struct openvpn_plugin_callbacks *global_vtab;
-    char *cert_string;
-    int iat_mode;
+    char *state_dir;
 };
 
 extern struct openvpn_vsocket_vtab shapeshifter_obfs4_socket_vtab;

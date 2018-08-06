@@ -1,5 +1,5 @@
 #include "shapeshifter-obfs4.h"
-#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"
+#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.h"
 #include <stdbool.h>
 #include <string.h>
 #include <err.h>
@@ -14,7 +14,7 @@ struct shapeshifter_obfs4_socket_posix
 {
     struct openvpn_vsocket_handle handle;
     struct shapeshifter_obfs4_context *ctx;
-    GoInt client_id;
+    GoInt server_id;
     int pipe_fd[2];
     unsigned last_rwflags;
 };
@@ -24,7 +24,7 @@ static void free_socket(struct shapeshifter_obfs4_socket_posix *sock)
     if (!sock)
         return;
     
-    Obfs4_close_connection(sock->client_id);
+    Obfs4_close_connection(sock->server_id);
     close(sock->pipe_fd[0]);
     close(sock->pipe_fd[1]);
     
@@ -46,14 +46,12 @@ static openvpn_vsocket_handle_t shapeshifter_obfs4_posix_bind(void *plugin_handl
     sock->ctx = (struct shapeshifter_obfs4_context *) plugin_handle;
 
     // Create an obfs4 client.
-    sock->client_id = Initialize_obfs4_c_client(sock->ctx->cert_string, sock->ctx->iat_mode);
+    sock->server_id = Obfs4_initialize_server(sock->ctx->state_dir);
     
     //FIXME: This only works for ipv4 addresses, need to address ipv6
     struct sockaddr_in *addr_in = (struct sockaddr_in *)addr;
-    GoInt dial_result = Obfs4_dial(sock->client_id, inet_ntoa(addr_in->sin_addr));
-    
-    if (dial_result != 0)
-        goto error;
+    Obfs4_listen(sock->server_id, inet_ntoa(addr_in->sin_addr));
+    Obfs4_accept(sock->server_id);
     
     return &sock->handle;
 
@@ -97,8 +95,8 @@ static unsigned shapeshifter_obfs4_posix_pump(openvpn_vsocket_handle_t handle)
 // Receive Data from the other side
 static ssize_t shapeshifter_obfs4_posix_recvfrom(openvpn_vsocket_handle_t handle, void *buf, size_t len, struct sockaddr *addr, socklen_t *addrlen)
 {
-    GoInt client_id = ((struct shapeshifter_obfs4_socket_posix *) handle)->client_id;
-    GoInt number_of_bytes_read = Obfs4_read(client_id, (void *)buf, (int)len);
+    GoInt server_id = ((struct shapeshifter_obfs4_socket_posix *) handle)->server_id;
+    GoInt number_of_bytes_read = Obfs4_read(server_id, (void *)buf, (int)len);
 
     if (number_of_bytes_read < 0)
     {
@@ -114,8 +112,8 @@ static ssize_t shapeshifter_obfs4_posix_recvfrom(openvpn_vsocket_handle_t handle
 // Send data to the other side
 static ssize_t shapeshifter_obfs4_posix_sendto(openvpn_vsocket_handle_t handle, const void *buf, size_t len, const struct sockaddr *addr, socklen_t addrlen)
 {
-    GoInt client_id = ((struct shapeshifter_obfs4_socket_posix *) handle)->client_id;
-    GoInt number_of_characters_sent = Obfs4_write(client_id, (void *)buf, (int)len);
+    GoInt server_id = ((struct shapeshifter_obfs4_socket_posix *) handle)->server_id;
+    GoInt number_of_characters_sent = Obfs4_write(server_id, (void *)buf, (int)len);
     
     if (number_of_characters_sent < 0)
     {

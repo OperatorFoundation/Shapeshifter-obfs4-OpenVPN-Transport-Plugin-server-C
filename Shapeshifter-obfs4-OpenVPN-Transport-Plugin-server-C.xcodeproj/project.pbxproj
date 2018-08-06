@@ -10,7 +10,7 @@
 		46F1EC8420FE65F300C71C22 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 46F1EC8320FE65F300C71C22 /* main.c */; };
 		46F1EC9020FE679200C71C22 /* shapeshifter-obfs4-posix.c in Sources */ = {isa = PBXBuildFile; fileRef = 46F1EC8B20FE679200C71C22 /* shapeshifter-obfs4-posix.c */; };
 		46F1EC9220FE679200C71C22 /* shapeshifter-obfs4.c in Sources */ = {isa = PBXBuildFile; fileRef = 46F1EC8D20FE679200C71C22 /* shapeshifter-obfs4.c */; };
-		46F1ECA520FEADDE00C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so in Frameworks */ = {isa = PBXBuildFile; fileRef = 46F1ECA220FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so */; };
+		CA9829BC2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CA9829BB2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -26,7 +26,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C"; sourceTree = BUILT_PRODUCTS_DIR; };
+		46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C"; sourceTree = BUILT_PRODUCTS_DIR; };
 		46F1EC8320FE65F300C71C22 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		46F1EC8B20FE679200C71C22 /* shapeshifter-obfs4-posix.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "shapeshifter-obfs4-posix.c"; sourceTree = "<group>"; };
 		46F1EC8D20FE679200C71C22 /* shapeshifter-obfs4.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "shapeshifter-obfs4.c"; sourceTree = "<group>"; };
@@ -34,10 +34,10 @@
 		46F1EC8F20FE679200C71C22 /* README.shapeshifter-obfs4 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "README.shapeshifter-obfs4"; sourceTree = "<group>"; };
 		46F1EC9420FE681700C71C22 /* openvpn-plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "openvpn-plugin.h"; sourceTree = "<group>"; };
 		46F1EC9520FE681700C71C22 /* openvpn-vsocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "openvpn-vsocket.h"; sourceTree = "<group>"; };
-		46F1ECA120FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"; sourceTree = SOURCE_ROOT; };
-		46F1ECA220FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so"; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so"; sourceTree = SOURCE_ROOT; };
 		46F1ECA620FEB4A600C71C22 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		46F1ECA720FEB50000C71C22 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		CA9829BA2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.h"; sourceTree = "<group>"; };
+		CA9829BB2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,7 +45,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				46F1ECA520FEADDE00C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so in Frameworks */,
+				CA9829BC2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,7 +58,7 @@
 				46F1ECA720FEB50000C71C22 /* README.md */,
 				46F1ECA620FEB4A600C71C22 /* .gitignore */,
 				46F1EC9320FE681700C71C22 /* OpenVPN-Files */,
-				46F1EC8220FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */,
+				46F1EC8220FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */,
 				46F1EC8120FE65F300C71C22 /* Products */,
 				46F1ECA420FEADDE00C71C22 /* Frameworks */,
 			);
@@ -67,22 +67,22 @@
 		46F1EC8120FE65F300C71C22 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */,
+				46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		46F1EC8220FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */ = {
+		46F1EC8220FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */ = {
 			isa = PBXGroup;
 			children = (
-				46F1EC9D20FE847700C71C22 /* Libraries */,
+				CA9829B92118F8EF005A56FF /* Libraries */,
 				46F1EC8F20FE679200C71C22 /* README.shapeshifter-obfs4 */,
 				46F1EC8B20FE679200C71C22 /* shapeshifter-obfs4-posix.c */,
 				46F1EC8D20FE679200C71C22 /* shapeshifter-obfs4.c */,
 				46F1EC8E20FE679200C71C22 /* shapeshifter-obfs4.h */,
 				46F1EC8320FE65F300C71C22 /* main.c */,
 			);
-			path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C";
+			path = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C";
 			sourceTree = "<group>";
 		};
 		46F1EC9320FE681700C71C22 /* OpenVPN-Files */ = {
@@ -94,15 +94,6 @@
 			path = "OpenVPN-Files";
 			sourceTree = "<group>";
 		};
-		46F1EC9D20FE847700C71C22 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-				46F1ECA120FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h */,
-				46F1ECA220FEAC1100C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so */,
-			);
-			path = Libraries;
-			sourceTree = "<group>";
-		};
 		46F1ECA420FEADDE00C71C22 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,12 +101,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		CA9829B92118F8EF005A56FF /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				CA9829BA2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.h */,
+				CA9829BB2118F8EF005A56FF /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.a */,
+			);
+			path = Libraries;
+			sourceTree = SOURCE_ROOT;
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		46F1EC7F20FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */ = {
+		46F1EC7F20FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 46F1EC8720FE65F300C71C22 /* Build configuration list for PBXNativeTarget "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */;
+			buildConfigurationList = 46F1EC8720FE65F300C71C22 /* Build configuration list for PBXNativeTarget "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C" */;
 			buildPhases = (
 				46F1EC7C20FE65F300C71C22 /* Sources */,
 				46F1EC7D20FE65F300C71C22 /* Frameworks */,
@@ -125,9 +125,9 @@
 			);
 			dependencies = (
 			);
-			name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C";
+			name = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C";
 			productName = "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C";
-			productReference = 46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */;
+			productReference = 46F1EC8020FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -144,7 +144,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 46F1EC7B20FE65F300C71C22 /* Build configuration list for PBXProject "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */;
+			buildConfigurationList = 46F1EC7B20FE65F300C71C22 /* Build configuration list for PBXProject "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -156,7 +156,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				46F1EC7F20FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C */,
+				46F1EC7F20FE65F300C71C22 /* Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C */,
 			);
 		};
 /* End PBXProject section */
@@ -295,6 +295,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C",
 					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Libraries",
+					"$(PROJECT_DIR)/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -311,6 +312,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C",
 					"$(PROJECT_DIR)/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C/Libraries",
+					"$(PROJECT_DIR)/Libraries",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -321,7 +323,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		46F1EC7B20FE65F300C71C22 /* Build configuration list for PBXProject "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */ = {
+		46F1EC7B20FE65F300C71C22 /* Build configuration list for PBXProject "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				46F1EC8520FE65F300C71C22 /* Debug */,
@@ -330,7 +332,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		46F1EC8720FE65F300C71C22 /* Build configuration list for PBXNativeTarget "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-C" */ = {
+		46F1EC8720FE65F300C71C22 /* Build configuration list for PBXNativeTarget "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-C" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				46F1EC8820FE65F300C71C22 /* Debug */,

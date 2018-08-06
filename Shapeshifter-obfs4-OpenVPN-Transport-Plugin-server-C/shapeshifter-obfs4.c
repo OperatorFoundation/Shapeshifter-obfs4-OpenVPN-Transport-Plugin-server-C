@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "openvpn-plugin.h"
 #include "openvpn-vsocket.h"
-#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"
+#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.h"
 #include "shapeshifter-obfs4.h"
 
 struct openvpn_vsocket_vtab shapeshifter_obfs4_socket_vtab = { NULL };
@@ -37,8 +37,7 @@ OPENVPN_EXPORT int openvpn_plugin_open_v3(int version, struct openvpn_plugin_arg
     // Currently context only does logging to OpenVPN
     struct shapeshifter_obfs4_context *context;
     context = (struct shapeshifter_obfs4_context *) calloc(1, sizeof(struct shapeshifter_obfs4_context));
-    context->cert_string = (char *)args->argv[1];
-    context->iat_mode = atoi(args->argv[2]);
+    context->state_dir = (char *)args->argv[1];
     
     if (!context)
         return OPENVPN_PLUGIN_FUNC_ERROR;
@@ -47,8 +46,6 @@ OPENVPN_EXPORT int openvpn_plugin_open_v3(int version, struct openvpn_plugin_arg
     
     // Sets up the VTable, useful stuff
     shapeshifter_obfs4_initialize_socket_vtab();
-    
-    
 
     // Tells openVPN what events we want the plugin to handle
     out->type_mask = OPENVPN_PLUGIN_MASK(OPENVPN_PLUGIN_SOCKET_INTERCEPT);
