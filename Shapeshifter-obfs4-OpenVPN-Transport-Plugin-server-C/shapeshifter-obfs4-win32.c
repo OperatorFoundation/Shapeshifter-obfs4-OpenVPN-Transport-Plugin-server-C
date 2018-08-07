@@ -2,7 +2,7 @@
 #define _WINSOCKAPI_    // stops windows.h including winsock.h
 
 #include "shapeshifter-obfs4.h"
-#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h"
+#include "Shapeshifter-obfs4-OpenVPN-Transport-Plugin-server-Cgo.h"
 #include "openvpn-vsocket.h"
 #include "openvpn-plugin.h"
 #include <stdbool.h>
@@ -30,7 +30,7 @@ struct shapeshifter_obfs4_socket_win32
     unsigned last_rwflags;
 
     // obfs4
-    GoInt client_id;
+    GoInt server_id;
 };
 
 struct openvpn_vsocket_vtab shapeshifter_obfs4_socket_vtab;
@@ -48,7 +48,7 @@ static void free_socket(struct shapeshifter_obfs4_socket_win32 *sock)
         CloseHandle(sock->completion_events.write);
     }
 
-    Obfs4_close_connection(sock->client_id);
+    Obfs4_close_connection(sock->server_id);
 
     free(sock);
 }
@@ -65,7 +65,7 @@ static openvpn_vsocket_handle_t shapeshifter_obfs4_win32_bind(void *plugin_handl
     sock->ctx = (struct shapeshifter_obfs4_context *) plugin_handle;
 
     // Create an obfs4 client.
-    sock->client_id = Initialize_obfs4_c_client(sock->ctx->cert_string, sock->ctx->iat_mode);
+    sock->server_id = Obfs4_initialize_server(sock->ctx->state_dir);
 
     /* See above: write is ready when idle, read is not-ready when idle. */
     sock->completion_events.read = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -76,11 +76,9 @@ static openvpn_vsocket_handle_t shapeshifter_obfs4_win32_bind(void *plugin_handl
 
     //FIXME: This only works for ipv4 addresses, need to address ipv6
     struct sockaddr_in *addr_in = (struct sockaddr_in *)addr;
-    GoInt dial_result = Obfs4_dial(sock->client_id, inet_ntoa(addr_in->sin_addr));
-
-    if (dial_result != 0)
-        goto error;
-
+    Obfs4_listen(sock->server_id, inet_ntoa(addr_in->sin_addr));
+    Obfs4_accept(sock->server_id);
+    
     return &sock->handle;
 
     error:
@@ -135,8 +133,8 @@ static unsigned shapeshifter_obfs4_win32_pump(openvpn_vsocket_handle_t handle)
 static ssize_t shapeshifter_obfs4_win32_recvfrom(openvpn_vsocket_handle_t handle, void *buf, size_t len, struct sockaddr *addr, openvpn_vsocket_socklen_t *addrlen)
 {
     struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
-    GoInt client_id = sock->client_id;
-    GoInt number_of_bytes_read = Obfs4_read(client_id, (void *)buf, (int)len);
+    GoInt server_id = sock->server_id;
+    GoInt number_of_bytes_read = Obfs4_read(server_id, (void *)buf, (int)len);
 
     if (number_of_bytes_read < 0)
     {
@@ -153,8 +151,8 @@ static ssize_t shapeshifter_obfs4_win32_recvfrom(openvpn_vsocket_handle_t handle
 static ssize_t shapeshifter_obfs4_win32_sendto(openvpn_vsocket_handle_t handle, const void *buf, size_t len, const struct sockaddr *addr, openvpn_vsocket_socklen_t addrlen)
 {
     struct shapeshifter_obfs4_socket_win32 *sock = (struct shapeshifter_obfs4_socket_win32 *)handle;
-    GoInt client_id = sock->client_id;
-    GoInt number_of_characters_sent = Obfs4_write(client_id, (void *)buf, (int)len);
+    GoInt server_id = sock->server_id;
+    GoInt number_of_characters_sent = Obfs4_write(server_id, (void *)buf, (int)len);
 
     if (number_of_characters_sent < 0)
     {
