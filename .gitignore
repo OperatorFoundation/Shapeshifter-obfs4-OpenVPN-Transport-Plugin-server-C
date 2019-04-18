@@ -108,3 +108,10 @@ fabric.properties
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/xcode
+
+CMakeCache.txt
+CMakeFiles/
+CMakeLists-windows.txt
+Makefile
+cmake_install.cmake
+libshapeshifter-obfs4-server.so
