@@ -1,0 +1,69 @@
+shapeshifter-obfs4
+
+DEPENDENCIES
+
+1) Go
+
+2) GCC (can be found here: http://tdm-gcc.tdragon.net/)
+
+3) Git
+
+
+ADDING THE GO CODE
+
+1) Check out the go code:
+
+    $go get github.com/OperatorFoundation/Shapeshifter-obfs4-OpenVPN-Transport-Plugin-Cgo
+
+2) From the go project directory run the following command to generate the library files that you will need:
+
+    $go build -buildmode=c-shared -o Shapeshifter-obfs4-OpenVPN-Transport-Plugin.lib
+
+3) Copy the following files into the Xcode/C project directory: Shapeshifter-obfs4-OpenVPN-Transport-Plugin.h and Shapeshifter-obfs4-OpenVPN-Transport-Plugin.so
+
+4) In Xcode go to Edit Scheme -> Options. For "Working Directory" choose to "Use Custom Working Directory" and then select the main Xcode/C project directory. This will make sure that the Xcode project knows how to find our GO library.
+
+
+BUILD
+
+In a terminal window, from the main openvpn directory, type the following commands:
+
+1) autoconf -i -v -f (if you are running this for the first time) OR autoreconf -i -v -f (If you have done it before)
+
+2) ./configure --enable-plugins --enable-plugin-shapeshifter-obfs4 OPENSSL_LIBS="-L/usr/local/Cellar/openssl/1.0.2o_1/lib -lcrypto -lssl" OPENSSL_CFLAGS="-I/usr/local/Cellar/openssl/1.0.2o_1/include"
+
+3) make
+
+
+autoconf: Generates the configure script from the configure.ac file
+enable-plugins: Allows the use of general plugins, including transport plugins.
+enable-plugin-[transport name]: Enables your specific transport plugin.
+OPENSSL_LIBS, OPENSSL_CFLAGS: *macOS only* Links in the openSSL libraries as this must be done manually for macOS. Please note that the correct paths may be different on your computer, for instance, you may have a different version installed.
+
+
+
+
+SYNOPSIS
+
+The shapeshifter-obfs4 plugin is a proof of concept for supporting protocol
+obfuscation for OpenVPN via a socket intercept plugin.
+
+BUILD
+
+You must specify --enable-plugin-shapeshifter-obfs4 at configure time to
+trigger building this plugin. It should function on POSIX-y platforms
+and Windows.
+
+USAGE
+
+To invoke this plugin, load it via an appropriate plugin line in the
+configuration file, and then specify 'proto indirect' rather than any
+other protocol. Packets will then be passed via UDP, but they will
+also undergo a very basic content transformation, and the bind port
+will be altered (see shapeshifter-obfs4-munging.c for details).
+
+CAVEATS
+
+This has undergone basic functionality testing, but not any kind of
+full-on stress test. Extended socket or I/O handling options are not
+supported at all.
