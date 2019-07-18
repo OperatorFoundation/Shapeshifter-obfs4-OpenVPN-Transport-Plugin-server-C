@@ -14,7 +14,7 @@ add_library(shapeshifter-obfs4-server SHARED
         src/shapeshifter-obfs4.c
         src/shapeshifter-obfs4.h)
 
-find_library(CGOLIB NAMES shapeshifter-obfs4-server-go.a shapeshifter-obfs4-server-go HINTS /root/Shapeshifter-OpenVPN/ubuntu/shapeshifter-obfs4-server-1.0/lib)
+find_library(CGOLIB NAMES shapeshifter-obfs4-server-go.a shapeshifter-obfs4-server-go HINTS /root/Shapeshifter-OpenVPN/transports/obfs4/shapeshifter-obfs4-server-1.0/lib)
 target_link_libraries(shapeshifter-obfs4-server ${CGOLIB})
 
 install(TARGETS shapeshifter-obfs4-server LIBRARY DESTINATION lib)
